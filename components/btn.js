@@ -9,13 +9,18 @@ import {
   Animated,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
 } from 'react-native';
 
 class Btn extends Component {
 
   static propTypes = {
-    ...NativeButton.propTypes,
+    ...TouchableWithoutFeedback.propTypes,
+    textStyle: Text.propTypes.style,
+    disabledStyle: Text.propTypes.style,
+    underlayColor: PropTypes.string,
+    background: (TouchableNativeFeedback.propTypes) ? TouchableNativeFeedback.propTypes.background : PropTypes.any,
     panDimensions: PropTypes.object.isRequired,
     width: PropTypes.number.isRequired,
     component: PropTypes.node,
