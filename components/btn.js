@@ -1,11 +1,11 @@
 import NativeButton from './NativeButton';
 
 import React, {
+  Component,
   PropTypes,
 } from 'react';
 
 import {
-  Component,
   Animated,
   StyleSheet,
   Text,
