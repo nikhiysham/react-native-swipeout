@@ -43,6 +43,11 @@ class Swipeout extends Component {
     scroll: PropTypes.func,
     onSwipeEnd: PropTypes.func,
     onSwipeStart: PropTypes.func,
+    sensitivity: PropTypes.number,
+  };
+
+  static defaultProps = {
+    sensitivity: 0,
   };
 
   constructor(props) {
@@ -67,27 +72,14 @@ class Swipeout extends Component {
     };
 
     this.state.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: (event, gestureState) => Math.abs(gestureState.dx) > 4 && Math.abs(gestureState.dy) > 4,
-      onPanResponderGrant: () => {
-        let {
-          panX,
-          leftOpen,
-          rightOpen,
-        } = this.state;
-        if (leftOpen || rightOpen) panX.setOffset(panX._value);
-      },
-      onPanResponderMove: Animated.event(
-        [null, {
-          dx: this.state.panX,
-        }]
-      ),
-      onPanResponderRelease: (e, gestureState) => {
-        this.handleEnd(e, gestureState);
-      },
-      onPanResponderTerminate: (e, gestureState) => {
-        this.handleEnd(e, gestureState);
-      },
+      onStartShouldSetPanResponder: (event, gestureState) => true,
+      onMoveShouldSetPanResponder: (event, gestureState) => this._onMoveShouldSetPanResponder(event, gestureState),
+      onMoveShouldSetPanResponderCapture: (event, gestureState) => this._onMoveShouldSetPanResponder(event, gestureState),
+      onPanResponderGrant: this._handlePanResponderGrant.bind(this),
+      onPanResponderMove: this._handlePanResponderMove.bind(this),
+      onPanResponderRelease: this._handlePanResponderEnd.bind(this),
+      onPanResponderTerminate: this._handlePanResponderEnd.bind(this),
+      onShouldBlockNativeResponder: (event, gestureState) => true,
     });
   }
 
@@ -115,6 +107,32 @@ class Swipeout extends Component {
         this.handleOpen(200, nextOpen === "right" ? -this.state.rightWidth : this.state.leftWidth);
       }
     }
+  }
+
+  _handlePanResponderEnd(event, gestureState) {
+    this.handleEnd(event, gestureState);
+  }
+
+  _handlePanResponderMove(event, gestureState) {
+    Animated.event(
+      [null, {
+        dx: this.state.panX,
+      }]
+    );
+  }
+
+  _handlePanResponderGrant(event, gestureState) {
+    let {
+      panX,
+      leftOpen,
+      rightOpen,
+    } = this.state;
+
+    if (leftOpen || rightOpen) panX.setOffset(panX._value);
+  }
+
+  _onMoveShouldSetPanResponder(event, gestureState) {
+    return Math.abs(gestureState.dx) > this.props.sensitivity;
   }
 
   btnWidth(btn) {
