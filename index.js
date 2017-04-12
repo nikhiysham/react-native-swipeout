@@ -68,7 +68,7 @@ class Swipeout extends Component {
 
     this.state.panResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onMoveShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: (event, gestureState) => Math.abs(gestureState.dx) > 4 && Math.abs(gestureState.dy) > 4,
       onPanResponderGrant: () => {
         let {
           panX,
