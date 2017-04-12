@@ -51,6 +51,16 @@ const NativeButton = React.createClass({
     };
   },
 
+  setNativeProps: function(props) {
+    if (this.refs.TouchableNativeFeedbackChild) {
+      this.refs.TouchableNativeFeedbackChild.setNativeProps(props);
+    }
+
+    if (this.refs.TouchableHighlightChild) {
+      this.refs.TouchableHighlightChild.setNativeProps(props);
+    }
+  },
+
   _renderText: function() {
     // If children is not a string don't wrapp it in a Text component
     if (typeof this.props.children !== 'string') {
@@ -94,7 +104,7 @@ const NativeButton = React.createClass({
       return (
         <TouchableNativeFeedback
           {...buttonProps}>
-          <View style={[styles.button, this.props.style, disabledStyle]}>
+          <View ref="TouchableNativeFeedbackChild" style={[styles.button, this.props.style, disabledStyle]}>
             {this._renderText()}
           </View>
         </TouchableNativeFeedback>
@@ -105,9 +115,11 @@ const NativeButton = React.createClass({
     return (
       <TouchableHighlight
         {...buttonProps}
-        style={[styles.button, this.props.style, disabledStyle]}
+        style={{ flex: 1 }}
         underlayColor={ this.props.underlayColor }>
-        {this._renderText()}
+        <View ref="TouchableHighlightChild" style={[styles.button, this.props.style, disabledStyle]}>
+          { this._renderText() }
+        </View>
       </TouchableHighlight>
     );
   }
