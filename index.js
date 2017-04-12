@@ -72,13 +72,27 @@ class Swipeout extends Component {
     };
 
     this.state.panResponder = PanResponder.create({
-      onStartShouldSetPanResponder: (event, gestureState) => true,
-      onMoveShouldSetPanResponder: (event, gestureState) => true,
-      onMoveShouldSetPanResponderCapture: (event, gestureState) => true,
-      onPanResponderGrant: this._handlePanResponderGrant.bind(this),
-      onPanResponderMove: this._handlePanResponderMove.bind(this),
-      onPanResponderRelease: this._handlePanResponderEnd.bind(this),
-      onPanResponderTerminate: this._handlePanResponderEnd.bind(this),
+      onStartShouldSetPanResponder: () => true,
+      onMoveShouldSetPanResponder: () => true,
+      onPanResponderGrant: () => {
+        let {
+          panX,
+          leftOpen,
+          rightOpen,
+        } = this.state;
+        if (leftOpen || rightOpen) panX.setOffset(panX._value);
+      },
+      onPanResponderMove: Animated.event(
+        [null, {
+          dx: this.state.panX,
+        }]
+      ),
+      onPanResponderRelease: (e, gestureState) => {
+        this.handleEnd(e, gestureState);
+      },
+      onPanResponderTerminate: (e, gestureState) => {
+        this.handleEnd(e, gestureState);
+      },
     });
   }
 
