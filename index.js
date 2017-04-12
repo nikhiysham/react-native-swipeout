@@ -33,10 +33,10 @@ class Swipeout extends Component {
   static propTypes = {
     style: View.propTypes.style,
     autoClose: PropTypes.bool,
-    open: PropTypes.oneOfType(
+    open: PropTypes.oneOfType([
       PropTypes.string,
       PropTypes.bool,
-    ),
+    ]),
     left: PropTypes.array,
     right: PropTypes.array,
     onClose: PropTypes.func,
