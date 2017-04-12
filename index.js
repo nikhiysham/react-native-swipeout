@@ -14,7 +14,6 @@ import {
 
 const styles = StyleSheet.create({
   btns: {
-    backgroundColor: 'blue',
     flex: 1,
     flexDirection: 'row',
     height: 20,
@@ -22,7 +21,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
   },
   container: {
-    backgroundColor: 'red',
     flex: 1,
     flexDirection: 'row',
   },
