@@ -195,10 +195,11 @@ class Swipeout extends Component {
   }
 
   handleBtnPress(btn) {
+    const { autoClose } = this.props;
     let { speedDefault } = this.state;
 
-    if (btn.props && btn.props.onPress) btn.props.onPress();
-    if (btn.autoClose) this.handleClose(speedDefault*2);
+    if (btn && btn.onPress) btn.onPress();
+    if (btn.autoClose || autoClose) this.handleClose(speedDefault*2);
   }
 
   handleClose(duration) {
