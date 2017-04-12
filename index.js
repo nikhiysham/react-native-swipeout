@@ -203,7 +203,7 @@ class Swipeout extends Component {
     panX.flattenOffset();
 
     onSwipeEnd && onSwipeEnd();
-    scroll && scroll(false);
+    scroll && scroll(true);
 
     if (moved && !rightOpen && !leftOpen) {
       if (rightShouldOpen) {
@@ -238,8 +238,8 @@ class Swipeout extends Component {
 
   handleStart() {
     let { onSwipeStart, scroll } = this.props;
-    if (onSwipeStart) onSwipeStart();
-    this.setState({ scroll: false })
+    this.setState({ scroll: false });
+    onSwipeStart && onSwipeStart();
     scroll && scroll(false);
   }
 
