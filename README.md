@@ -75,7 +75,7 @@ open            | string/bool |           | "left", "right", or `false`
 left            | array       | []        | swipeout buttons on left
 onClose         | func        |           | function when buttons are hidden
 onOpen          | func        |           | function when buttons are exposed
-props           | array       | null      | pass props to swipeout (ex: `style`)
+props           | object      | null      | pass props to swipeout (ex: `style`)
 right           | array       | []        | swipeout buttons on right
 scroll          | func        |           | prevent parent scroll
 
@@ -83,7 +83,7 @@ scroll          | func        |           | prevent parent scroll
 
 Prop            | Type   | Default   | Description
 --------------- | ------ | --------- | -----------
-component       | node   | null      | pass custom component to button
-props           | array  | null      | pass props to button (ex: `onPress`, `style`, `underlayColor`)
+component       | string | null      | pass custom component to button
+props           | object | null      | pass props to button (ex: `onPress`, `style`, `underlayColor`)
 text            | string | 'Click Me'| text
 type            | string | null      | `danger`/`delete`, `primary`, `secondary`, `success`
