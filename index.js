@@ -181,7 +181,7 @@ class Swipeout extends Component {
   }
 
   handleEnd(e, gestureState) {
-    let { onSwipeEnd } = this.props;
+    let { onSwipeEnd, scroll } = this.props;
     let {
       speedDefault,
       panX,
@@ -202,7 +202,8 @@ class Swipeout extends Component {
 
     panX.flattenOffset();
 
-    if (onSwipeEnd) onSwipeEnd();
+    onSwipeEnd && onSwipeEnd();
+    scroll && scroll(false);
 
     if (moved && !rightOpen && !leftOpen) {
       if (rightShouldOpen) {
@@ -236,9 +237,10 @@ class Swipeout extends Component {
   }
 
   handleStart() {
-    let { onSwipeStart } = this.props;
+    let { onSwipeStart, scroll } = this.props;
     if (onSwipeStart) onSwipeStart();
     this.setState({ scroll: false })
+    scroll && scroll(false);
   }
 
   measureSwipeout() {
