@@ -1,11 +1,14 @@
 import React, {
+  PropTypes,
+} from 'react';
+
+import {
   TouchableWithoutFeedback,
   TouchableNativeFeedback,
   TouchableHighlight,
   Text,
   StyleSheet,
   Platform,
-  PropTypes,
   View,
 } from 'react-native';
 
@@ -20,7 +23,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   opacity: {
-    opacity: 0.5,
+    opacity: 0.8,
   },
 });
 
@@ -102,11 +105,9 @@ const NativeButton = React.createClass({
     return (
       <TouchableHighlight
         {...buttonProps}
-        style={{ flex: 1}}
+        style={[styles.button, this.props.style, disabledStyle]}
         underlayColor={ this.props.underlayColor }>
-        <View style={[styles.button, this.props.style, disabledStyle]}>
-          {this._renderText()}
-        </View>
+        {this._renderText()}
       </TouchableHighlight>
     );
   }

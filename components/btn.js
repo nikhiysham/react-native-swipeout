@@ -1,12 +1,15 @@
 import NativeButton from './NativeButton';
 
 import React, {
+  PropTypes,
+} from 'react';
+
+import {
   Component,
   Animated,
   StyleSheet,
   Text,
   TouchableHighlight,
-  PropTypes,
 } from 'react-native';
 
 class Btn extends Component {

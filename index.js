@@ -1,37 +1,52 @@
-const React = require('react-native');
-const {
+import Btn from './components/btn';
+
+import React, {
+  Component,
+  PropTypes,
+} from 'react';
+
+import {
   Animated,
   PanResponder,
   StyleSheet,
-  View
-} = React
+  View,
+} from 'react-native';
 
-const Btn = require('./components/btn.js');
+const styles = StyleSheet.create({
+  btns: {
+    backgroundColor: 'blue',
+    flex: 1,
+    flexDirection: 'row',
+    height: 20,
+    overflow: 'hidden',
+    position: 'absolute',
+  },
+  container: {
+    backgroundColor: 'red',
+    flex: 1,
+    flexDirection: 'row',
+  },
+});
 
-class Swipeout extends React.Component {
-  componentDidMount() {
-    let { panX } = this.state;
+class Swipeout extends Component {
 
-    setTimeout(this.measureSwipeout.bind(this));
-    panX.addListener((value) => this.panListener(value.value));
-  }
-  componentWillUpdate(nextProps, nextState) {
-    let {open} = this.props;
-    let nextOpen = nextProps.open;
+  static propTypes = {
+    style: View.propTypes.style,
+    autoClose: PropTypes.bool,
+    open: PropTypes.oneOfType(
+      PropTypes.string,
+      PropTypes.bool,
+    ),
+    left: PropTypes.array,
+    right: PropTypes.array,
+    onClose: PropTypes.func,
+    onOpen: PropTypes.func,
+    props: PropTypes.object,
+    scroll: PropTypes.func,
+    onSwipeEnd: PropTypes.func,
+    onSwipeStart: PropTypes.func,
+  };
 
-    if (open != nextProps.open) {
-      if(!nextOpen) {
-        this.handleClose(200);
-      } else {
-        this.handleOpen(200, nextOpen === "right" ? -this.state.rightWidth : this.state.leftWidth);
-      }
-    }
-  }
-  componentWillUnmount() {
-    let { panX } = this.state;
-
-    panX.removeAllListeners();
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -77,10 +92,38 @@ class Swipeout extends React.Component {
       },
     });
   }
+
+  componentDidMount() {
+    let { panX } = this.state;
+
+    setTimeout(this.measureSwipeout.bind(this));
+    panX.addListener((value) => this.panListener(value.value));
+  }
+
+  componentWillUnmount() {
+    let { panX } = this.state;
+
+    panX.removeAllListeners();
+  }
+
+  componentWillUpdate(nextProps, nextState) {
+    let {open} = this.props;
+    let nextOpen = nextProps.open;
+
+    if (open != nextProps.open) {
+      if(!nextOpen) {
+        this.handleClose(200);
+      } else {
+        this.handleOpen(200, nextOpen === "right" ? -this.state.rightWidth : this.state.leftWidth);
+      }
+    }
+  }
+
   btnWidth(btn) {
     let hasCustomWidth = btn.props && btn.props.style && btn.props.style.width;
     return hasCustomWidth ? btn.props.style.width : false;
   }
+
   btnsWidthTotal(width, group, side) {
     let customWidths = [];
 
@@ -99,6 +142,7 @@ class Swipeout extends React.Component {
 
     return customWidthTotal + defaultWidthsTotal;
   }
+
   setBtnsWidth(left, right) {
     let {
       leftBtnWidthDefault: leftDefault,
@@ -120,12 +164,14 @@ class Swipeout extends React.Component {
       rightBtnWidths: rightWidths,
     });
   }
+
   handleBtnPress(btn) {
     let { speedDefault } = this.state;
 
     if (btn.props && btn.props.onPress) btn.props.onPress();
     if (btn.autoClose) this.handleClose(speedDefault*2);
   }
+
   handleClose(duration) {
     let { onClose } = this.props;
     if (onClose) onClose();
@@ -135,6 +181,7 @@ class Swipeout extends React.Component {
       toValue: 0,
     }).start();
   }
+
   handleEnd(e, gestureState) {
     let { onSwipeEnd } = this.props;
     let {
@@ -179,6 +226,7 @@ class Swipeout extends React.Component {
       });
     }
   }
+
   handleOpen(duration, toValue) {
     let { onOpen } = this.props;
     if (onOpen) onOpen();
@@ -188,11 +236,13 @@ class Swipeout extends React.Component {
       toValue: toValue,
     }).start();
   }
+
   handleStart() {
     let { onSwipeStart } = this.props;
     if (onSwipeStart) onSwipeStart();
     this.setState({ scroll: false })
   }
+
   measureSwipeout() {
     this.refs.swipeout.measure((a, b, width, height, px, py) => {
       let {
@@ -210,6 +260,7 @@ class Swipeout extends React.Component {
       this.setBtnsWidth(left, right);
     });
   }
+
   panListener(value) {
     let {
       leftOpen,
@@ -228,6 +279,7 @@ class Swipeout extends React.Component {
       rightVisible: rightOpen || rightVisible,
     });
   }
+
   returnBtnDimensions(i, side) {
     let {
       height,
@@ -252,6 +304,7 @@ class Swipeout extends React.Component {
       width: width
     };
   }
+
   shouldOpen(min, width, velocity, isOpen, isOpenOpposite) {
     let velocityMin = 0.3;
     let open = isOpen || isOpenOpposite;
@@ -262,6 +315,7 @@ class Swipeout extends React.Component {
 
     return openMin || openFast || remainOpen;
   }
+
   styleBtns(show, left, right, inputRange, outputRange) {
     let {
       height,
@@ -277,6 +331,7 @@ class Swipeout extends React.Component {
       width: !scroll ? panX.interpolate({inputRange: inputRange, outputRange: outputRange}) : 0,
     };
   }
+
   render() {
     let {
       children,
@@ -365,21 +420,5 @@ class Swipeout extends React.Component {
     );
   }
 };
-
-var styles = StyleSheet.create({
-  btns: {
-    backgroundColor: 'blue',
-    flex: 1,
-    flexDirection: 'row',
-    height: 20,
-    overflow: 'hidden',
-    position: 'absolute',
-  },
-  container: {
-    backgroundColor: 'red',
-    flex: 1,
-    flexDirection: 'row',
-  },
-});
 
 module.exports = Swipeout;
